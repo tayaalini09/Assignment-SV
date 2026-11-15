@@ -20,7 +20,7 @@ try:  # your name and matric number live in student_info.py
 except Exception:
     STUDENT_NAME, MATRIC_NO = "Your name", "Your matric number"
 
-SHOW_BORDER = True    # set to False to remove the patterned border
+SHOW_FRAME = True    # set to False to remove the rounded gradient frame
 
 GEOJSON_URL = ("https://raw.githubusercontent.com/codeforamerica/click_that_hood/"
                "master/public/data/malaysia.geojson")
@@ -64,121 +64,144 @@ def pct(new, old):
 
 CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 :root {
-  --ink:#17324d; --teal:#0e7c86; --saffron:#f4b400; --paper:#f6f8fb; --rule:#dde5ec; --soft:#5d7284;
-  --shadow: 0 1px 2px rgba(23,50,77,.06), 0 10px 28px rgba(23,50,77,.07);
-  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16' viewBox='0 0 24 16'%3E%3Cpolygon points='0,16 12,1 24,16' fill='%230e7c86'/%3E%3Cpolygon points='6,16 12,7 18,16' fill='%23f4b400'/%3E%3C/svg%3E");
+  --ink:#1b2a52; --soft:#62709a; --blue:#4c5fe0; --violet:#7c5cdb;
+  --glass: rgba(255,255,255,.58); --glass-line: rgba(255,255,255,.78);
+  --shadow: 0 10px 34px rgba(64,84,180,.16), inset 0 1px 0 rgba(255,255,255,.85);
 }
+[data-testid="stApp"] { background: #dde5f5; }
 [data-testid="stAppViewContainer"] {
-  background-color: #eef6f8;
+  background-color: #c6d3f3;
   background-image:
-    radial-gradient(900px 600px at 72% 8%, rgba(255,255,255,.75), transparent 62%),
-    linear-gradient(135deg, #d3ece9 0%, #eef6f8 46%, #faf1d6 100%);
+    radial-gradient(900px 560px at 6% 2%, rgba(150,215,245,.9), transparent 62%),
+    radial-gradient(900px 620px at 96% 98%, rgba(150,120,235,.55), transparent 60%),
+    radial-gradient(700px 500px at 58% 38%, rgba(255,255,255,.55), transparent 66%),
+    linear-gradient(135deg, #c9dcf5 0%, #c3cdf2 50%, #cdc2ee 100%);
   background-repeat: no-repeat;
 }
 [data-testid="stHeader"] { background: transparent; }
-.block-container { padding-top: 1.6rem; max-width: 1200px; }
-h1, h2, h3, h4 { font-family: 'Sora', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
-h3 { font-size: 1.2rem; margin-top: 1.6rem; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
-[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li { font-family: 'DM Sans', sans-serif; }
+.block-container { padding-top: 2.4rem; padding-left: 2.6rem; padding-right: 2.6rem; max-width: 1200px; }
+h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
+h3 { font-size: 1.15rem; font-weight: 700; margin-top: 1.5rem; }
+[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li { font-family: 'Plus Jakarta Sans', sans-serif; }
 
-[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid var(--rule); }
-.side-title { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; line-height: 1.3; color: var(--ink); margin: 6px 0 10px; }
-.side-me { font-family: 'DM Sans', sans-serif; font-size: .85rem; line-height: 1.55; color: var(--soft);
-           border-top: 1px solid var(--rule); padding-top: 12px; margin-top: 18px; }
+[data-testid="stSidebar"] { background: rgba(255,255,255,.42); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+                            border-right: 1px solid var(--glass-line); }
+[data-testid="stSidebarContent"] { background: transparent; }
+.brand { display: flex; align-items: center; gap: 10px; margin: 8px 0 18px; }
+.logo { width: 40px; height: 40px; border-radius: 13px; background: linear-gradient(135deg, #5b8def, #7c5cdb); color: #fff;
+        font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: .95rem;
+        box-shadow: 0 6px 16px rgba(76,95,224,.35); }
+.brand-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; color: var(--ink); line-height: 1.15; font-size: 1rem; }
+.brand-sub { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--soft); font-size: .72rem; font-weight: 600; }
+[data-testid="stSidebar"] label[data-baseweb="radio"] { padding: 9px 12px; border-radius: 12px; margin: 0 0 4px; width: 100%; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) { background: rgba(255,255,255,.95); box-shadow: 0 6px 18px rgba(64,84,180,.18); }
+.side-me { font-family: 'Plus Jakarta Sans', sans-serif; font-size: .82rem; line-height: 1.55; color: var(--soft);
+           border-top: 1px solid var(--glass-line); padding-top: 12px; margin-top: 20px; }
 
-.pattern { height: 16px; background-image: var(--pattern); background-repeat: repeat-x; background-size: 24px 16px;
-           border-bottom: 3px solid var(--teal); margin-bottom: 22px; }
-.page-head { margin-bottom: 22px; }
-.page-title { font-family: 'Sora', sans-serif; font-size: 2.1rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
-.page-obj { font-family: 'DM Sans', sans-serif; color: var(--soft); font-size: 1.05rem; max-width: 72ch; margin: .5rem 0 0; }
+.kpi, .find, .obj, .who, [data-testid="stPlotlyChart"], [data-testid="stExpander"] {
+  background: var(--glass); backdrop-filter: blur(16px) saturate(150%); -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-line); border-radius: 22px; box-shadow: var(--shadow); }
+[data-testid="stPlotlyChart"] { padding: 12px 14px; }
+[data-testid="stAlert"] { border-radius: 16px; background: rgba(255,255,255,.55); border: 1px solid var(--glass-line); }
+[data-baseweb="select"] > div { border-radius: 12px; }
 
-.strip-title { font-family: 'Sora', sans-serif; font-weight: 600; color: var(--ink); margin: 4px 0 8px; }
-.strip { display: grid; grid-template-columns: repeat(4, 1fr); background: #fff; border: 1px solid var(--rule);
-         border-top: 4px solid var(--teal); border-radius: 12px; margin-bottom: 24px; box-shadow: var(--shadow); }
-.cell { padding: 18px 22px; border-right: 1px solid var(--rule); }
-.cell:last-child { border-right: none; }
-.cell-label { font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--soft); font-weight: 500; }
-.cell-value { font-family: 'Sora', sans-serif; font-size: 1.7rem; font-weight: 600; color: var(--ink); margin: 3px 0; }
-.cell-note { font-family: 'DM Sans', sans-serif; font-size: .86rem; font-weight: 700; }
-.up { color: #1a7f5a; } .down { color: #c0392b; } .flat { color: var(--soft); }
+.page-head { margin-bottom: 20px; }
+.page-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.1rem; font-weight: 800; color: var(--ink); line-height: 1.2; }
+.page-obj { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--soft); font-size: 1.02rem; max-width: 74ch; margin: .45rem 0 0; }
 
-.finds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 8px 0 22px; }
-.find { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px; box-shadow: var(--shadow); }
-.find-num { font-family: 'Sora', sans-serif; font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
-.find-text { font-family: 'DM Sans', sans-serif; color: #33495a; font-size: .98rem; margin-top: 8px; line-height: 1.5; }
-.find-tag { font-family: 'DM Sans', sans-serif; color: var(--soft); font-size: .86rem; font-weight: 500; margin-top: 10px; }
+.who { display: flex; align-items: center; gap: 14px; padding: 16px 22px; margin-bottom: 22px; flex-wrap: wrap; }
+.avatar { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, #5b8def, #7c5cdb); color: #fff;
+          display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800;
+          box-shadow: 0 6px 16px rgba(76,95,224,.35); }
+.who-hi { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--soft); font-size: .85rem; font-weight: 600; }
+.who-name { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); font-size: 1.35rem; font-weight: 800; line-height: 1.2; }
+.who-chips { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-block; padding: 5px 14px; border-radius: 999px; background: rgba(255,255,255,.75); border: 1px solid var(--glass-line);
+        font-family: 'Plus Jakarta Sans', sans-serif; font-size: .8rem; font-weight: 700; color: var(--blue); }
+
+.kpi-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; color: var(--ink); margin: 4px 0 10px; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px; }
+.kpi { padding: 18px 20px; }
+.kpi-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: .86rem; color: var(--soft); font-weight: 600; }
+.kpi-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.85rem; font-weight: 800; color: var(--ink); margin: 4px 0 8px; line-height: 1.15; }
+.pill { display: inline-block; border-radius: 999px; padding: 3px 11px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: .78rem; font-weight: 700; }
+.up { background: rgba(34,160,107,.15); color: #14795a; }
+.down { background: rgba(226,76,75,.14); color: #c03636; }
+.flat { background: rgba(76,95,224,.12); color: #3b4bc4; }
+
+.finds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 6px 0 22px; }
+.find { padding: 20px 22px; }
+.find-num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.5rem; font-weight: 800; line-height: 1.1; }
+.find-text { font-family: 'Plus Jakarta Sans', sans-serif; color: #33466f; font-size: .96rem; margin-top: 8px; line-height: 1.5; }
+.find-tag { margin-top: 12px; }
 
 .objs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 6px 0 20px; }
-.obj { background: #fff; border: 1px solid var(--rule); border-left: 5px solid var(--saffron); border-radius: 12px; padding: 18px 20px; }
+.obj { padding: 18px 20px; }
 .obj h4 { margin: 0 0 6px; font-size: 1.05rem; }
-.obj p { margin: 0 0 8px; font-size: .95rem; color: #33495a; font-family: 'DM Sans', sans-serif; }
-.obj .src { font-size: .86rem; color: var(--soft); font-weight: 500; }
-
-[data-testid="stPlotlyChart"] { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 10px 12px;
-                                box-shadow: var(--shadow); }
-[data-testid="stExpander"] { background: #fff; border: 1px solid var(--rule); border-radius: 12px; }
+.obj p { margin: 0 0 10px; font-size: .94rem; color: #33466f; font-family: 'Plus Jakarta Sans', sans-serif; }
+.src { display: inline-block; padding: 3px 11px; border-radius: 999px; background: rgba(76,95,224,.12); color: #3b4bc4;
+       font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .78rem; }
 @media (max-width: 900px) {
-  .strip { grid-template-columns: repeat(2, 1fr); } .cell { border-bottom: 1px solid var(--rule); }
-  .objs, .finds { grid-template-columns: 1fr; }
+  .kpis { grid-template-columns: repeat(2, 1fr); } .objs, .finds { grid-template-columns: 1fr; }
 }
 </style>
 """
-
-FRAME_SVG = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54' viewBox='0 0 54 54'%3E"
-             "%3Crect x='0' y='0' width='18' height='18' fill='%230e7c86'/%3E%3Crect x='36' y='0' width='18' height='18' fill='%230e7c86'/%3E"
-             "%3Crect x='0' y='36' width='18' height='18' fill='%230e7c86'/%3E%3Crect x='36' y='36' width='18' height='18' fill='%230e7c86'/%3E"
-             "%3Cpolygon points='9,3 15,9 9,15 3,9' fill='%23f4b400'/%3E%3Cpolygon points='45,3 51,9 45,15 39,9' fill='%23f4b400'/%3E"
-             "%3Cpolygon points='9,39 15,45 9,51 3,45' fill='%23f4b400'/%3E%3Cpolygon points='45,39 51,45 45,51 39,45' fill='%23f4b400'/%3E"
-             "%3Crect x='18' y='0' width='18' height='3' fill='%230e7c86'/%3E%3Cpolygon points='18,3 36,3 27,18' fill='%230e7c86'/%3E%3Cpolygon points='23,3 31,3 27,10' fill='%23f4b400'/%3E"
-             "%3Crect x='18' y='51' width='18' height='3' fill='%230e7c86'/%3E%3Cpolygon points='18,51 36,51 27,36' fill='%230e7c86'/%3E%3Cpolygon points='23,51 31,51 27,44' fill='%23f4b400'/%3E"
-             "%3Crect x='0' y='18' width='3' height='18' fill='%230e7c86'/%3E%3Cpolygon points='3,18 3,36 18,27' fill='%230e7c86'/%3E%3Cpolygon points='3,23 3,31 10,27' fill='%23f4b400'/%3E"
-             "%3Crect x='51' y='18' width='3' height='18' fill='%230e7c86'/%3E%3Cpolygon points='51,18 51,36 36,27' fill='%230e7c86'/%3E%3Cpolygon points='51,23 51,31 44,27' fill='%23f4b400'/%3E"
-             "%3C/svg%3E")
-FRAME_CSS = ("<style>.stApp::after { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; "
-             "pointer-events: none; z-index: 1000000; border: 18px solid transparent; "
-             f"border-image-source: url(\"{FRAME_SVG}\"); border-image-slice: 18; border-image-width: 18px; "
-             "border-image-repeat: round; } .pattern { display: none; } .block-container { padding-top: 2.6rem; }</style>")
-if SHOW_BORDER:
+FRAME_CSS = """
+<style>
+[data-testid="stAppViewContainer"] { clip-path: inset(10px round 30px); }
+.stApp::after { content: ''; position: fixed; top: 10px; left: 10px; right: 10px; bottom: 10px; border-radius: 30px; padding: 8px;
+  background: linear-gradient(135deg, #5b8def 0%, #3f4fd8 50%, #7c5cdb 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; z-index: 1000000; }
+</style>
+"""
+if SHOW_FRAME:
     CSS += FRAME_CSS
 st.markdown(CSS, unsafe_allow_html=True)
 
 
 def page_head(title, text):
-    st.markdown(f'<div class="pattern"></div><div class="page-head"><div class="page-title">{html.escape(title)}</div>'
+    st.markdown(f'<div class="page-head"><div class="page-title">{html.escape(title)}</div>'
                 f'<p class="page-obj">{html.escape(text)}</p></div>', unsafe_allow_html=True)
 
 
 def summary_box(items, title="Summary box"):
-    cells = ""
+    cards = ""
     for label, value, note in items:
         cls = "up" if str(note).startswith("+") else ("down" if str(note).startswith("-") else "flat")
-        cells += (f'<div class="cell"><div class="cell-label">{html.escape(str(label))}</div>'
-                  f'<div class="cell-value">{html.escape(str(value))}</div>'
-                  f'<div class="cell-note {cls}">{html.escape(str(note))}</div></div>')
+        cards += (f'<div class="kpi"><div class="kpi-label">{html.escape(str(label))}</div>'
+                  f'<div class="kpi-value">{html.escape(str(value))}</div>'
+                  f'<span class="pill {cls}">{html.escape(str(note))}</span></div>')
     if title:
-        st.markdown(f'<div class="strip-title">{html.escape(title)}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="strip">{cells}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="kpi-title">{html.escape(title)}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="kpis">{cards}</div>', unsafe_allow_html=True)
 
 
 def show(fig):
-    fig.update_layout(font=dict(family="DM Sans, Arial, sans-serif", color="#12263a"),
-                      title_font=dict(family="Sora, Arial, sans-serif", size=16))
+    fig.update_layout(font=dict(family="Plus Jakarta Sans, Arial, sans-serif", color="#1b2a52"),
+                      title_font=dict(family="Plus Jakarta Sans, Arial, sans-serif", size=16),
+                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig, use_container_width=True)
 
 
 # ------------------------------------------------------------------ sidebar
-st.sidebar.markdown('<div class="pattern" style="margin-bottom:14px"></div>'
-                    '<div class="side-title">Malaysia income, schools and marriages</div>', unsafe_allow_html=True)
+st.sidebar.markdown('<div class="brand"><div class="logo">MY</div><div><div class="brand-name">Malaysia Dashboard</div>'
+                    '<div class="brand-sub">Income, schools and marriages</div></div></div>', unsafe_allow_html=True)
 page = st.sidebar.radio("Go to", ["Home", "Objective 1: Income", "Objective 2: Schools",
                                   "Objective 3: Marriages", "Merged data"])
-st.sidebar.markdown(f'<div class="side-me">{html.escape(STUDENT_NAME)}<br>{html.escape(MATRIC_NO)}<br>'
+st.sidebar.markdown(f'<div class="side-me"><b>{html.escape(STUDENT_NAME)}</b><br>{html.escape(MATRIC_NO)}<br>'
                     'JIE42403 Scientific Visualisation<br>Data: data.gov.my, 2019 to 2023</div>',
                     unsafe_allow_html=True)
 
 # ================================================================== HOME
 if page == "Home":
+    _initials = "".join(w[0] for w in STUDENT_NAME.split()[:2]).upper() or "MY"
+    st.markdown(f'''<div class="who"><div class="avatar">{html.escape(_initials)}</div>
+<div><div class="who-hi">Prepared by</div><div class="who-name">{html.escape(STUDENT_NAME)}</div></div>
+<div class="who-chips"><span class="chip">{html.escape(MATRIC_NO)}</span><span class="chip">JIE42403</span>
+<span class="chip">2019 to 2023</span></div></div>''', unsafe_allow_html=True)
     page_head("Household income, schools and marriages in Malaysia",
               "Three open datasets for 16 states and federal territories, merged by state and year, 2019 to 2023.")
     summary_box([("States and territories", "16", "all of Malaysia"),
@@ -190,28 +213,28 @@ if page == "Home":
     _mar = merged.groupby("year")["marriage_abs_avg"].sum()
     st.markdown(f"""
 <div class="finds">
-  <div class="find"><div class="find-num" style="color:#c0392b">{pct(_inc[2020], _inc[2019]):+.1f}%</div>
+  <div class="find"><div class="find-num" style="color:#d64545">{pct(_inc[2020], _inc[2019]):+.1f}%</div>
   <div class="find-text">Average household income fell in 2020 and was back above its 2019 level by 2022 ({pct(_inc[2022], _inc[2019]):+.1f}%).</div>
-  <div class="find-tag">Objective 1: income</div></div>
-  <div class="find"><div class="find-num" style="color:#0e7c86">{pct(_sch[2023], _sch[2019]):+.2f}%</div>
+  <div class="find-tag"><span class="src">Objective 1: income</span></div></div>
+  <div class="find"><div class="find-num" style="color:#3f4fd8">{pct(_sch[2023], _sch[2019]):+.2f}%</div>
   <div class="find-text">The number of schools hardly changed between 2019 and 2023 ({int(_sch[2023] - _sch[2019]):+d} schools).</div>
-  <div class="find-tag">Objective 2: schools</div></div>
-  <div class="find"><div class="find-num" style="color:#c0392b">{pct(_mar[2023], _mar[2019]):+.1f}%</div>
+  <div class="find-tag"><span class="src">Objective 2: schools</span></div></div>
+  <div class="find"><div class="find-num" style="color:#d64545">{pct(_mar[2023], _mar[2019]):+.1f}%</div>
   <div class="find-text">Marriages in 2023 were below 2019, after a dip in 2020 and a rebound in 2021.</div>
-  <div class="find-tag">Objective 3: marriages</div></div>
+  <div class="find-tag"><span class="src">Objective 3: marriages</span></div></div>
 </div>
 """, unsafe_allow_html=True)
     st.markdown("""
 <div class="objs">
   <div class="obj"><h4>Objective 1: Household income trends</h4>
   <p>Show how household income changed across states between 2019, 2020 and 2022, and where it is highest and lowest.</p>
-  <div class="src">Data: income</div></div>
+  <span class="src">Data: income</span></div>
   <div class="obj"><h4>Objective 2: School distribution</h4>
   <p>Examine the number and distribution of schools across states, districts and school types from 2019 to 2023.</p>
-  <div class="src">Data: schools</div></div>
+  <span class="src">Data: schools</span></div>
   <div class="obj"><h4>Objective 3: Marriage trends</h4>
   <p>Explore how marriages changed by state and sex from 2019 to 2023, and how they relate to household income.</p>
-  <div class="src">Data: marriages and income</div></div>
+  <span class="src">Data: marriages and income</span></div>
 </div>
 """, unsafe_allow_html=True)
     st.info("Open an objective from the menu on the left. Household income is only published for 2019, 2020 and 2022, "
@@ -266,7 +289,7 @@ elif page == "Objective 1: Income":
         fig = px.choropleth(dm, geojson=gj, locations="canon", featureidkey="properties.canon",
                             color="income_mean", hover_name="state", color_continuous_scale=INCOME_SCALE,
                             range_color=(4500, 13500), labels={"income_mean": "Mean income (RM)"})
-        fig.update_geos(fitbounds="locations", visible=False, bgcolor="#f7f8fa")
+        fig.update_geos(fitbounds="locations", visible=False, bgcolor="rgba(0,0,0,0)")
         fig.update_traces(marker_line_color="white", marker_line_width=1)
         fig.update_layout(coloraxis_colorbar=dict(
             title="Mean Income (RM)", tickvals=list(range(5000, 14000, 1000)),
