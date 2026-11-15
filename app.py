@@ -21,6 +21,7 @@ except Exception:
     STUDENT_NAME, MATRIC_NO = "Your name", "Your matric number"
 
 SHOW_FRAME = True    # set to False to remove the rounded gradient frame
+SIDEBAR_COLOR = True    # set to False for the light glass sidebar
 
 GEOJSON_URL = ("https://raw.githubusercontent.com/codeforamerica/click_that_hood/"
                "master/public/data/malaysia.geojson")
@@ -81,7 +82,10 @@ CSS = """
   background-repeat: no-repeat;
 }
 [data-testid="stHeader"] { background: transparent; }
-.block-container { padding-top: 2.4rem; padding-left: 2.6rem; padding-right: 2.6rem; max-width: 1200px; }
+.block-container { padding-top: 2.8rem; padding-left: 2.6rem; padding-right: 2.6rem; padding-bottom: 3.5rem; max-width: 1200px; }
+[data-testid="stSidebarUserContent"] { padding-left: 1.3rem; padding-right: 1rem; padding-top: .6rem; }
+[data-testid="stSidebarHeader"] { padding-left: 1.3rem; padding-right: 1.2rem; }
+[data-testid="stToolbar"] { right: 2.2rem; top: .5rem; }
 h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
 h3 { font-size: 1.15rem; font-weight: 700; margin-top: 1.5rem; }
 [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -150,8 +154,8 @@ h3 { font-size: 1.15rem; font-weight: 700; margin-top: 1.5rem; }
 """
 FRAME_CSS = """
 <style>
-[data-testid="stAppViewContainer"] { clip-path: inset(10px round 30px); }
-.stApp::after { content: ''; position: fixed; top: 10px; left: 10px; right: 10px; bottom: 10px; border-radius: 30px; padding: 8px;
+[data-testid="stAppViewContainer"] { clip-path: inset(14px round 28px); }
+.stApp::after { content: ''; position: fixed; top: 14px; left: 14px; right: 14px; bottom: 14px; border-radius: 28px; padding: 7px;
   background: linear-gradient(135deg, #5b8def 0%, #3f4fd8 50%, #7c5cdb 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; z-index: 1000000; }
@@ -173,6 +177,31 @@ KPI_CSS = """
 </style>
 """
 CSS += KPI_CSS
+SIDEBAR_CSS = """
+<style>
+[data-testid="stSidebar"] { background: linear-gradient(180deg, #4b57d6 0%, #5b4fc9 55%, #7c5cdb 100%); border-right: none;
+                            backdrop-filter: none; -webkit-backdrop-filter: none; overflow: hidden; }
+[data-testid="stSidebar"]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40%; max-height: 330px;
+  pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 300'%3E%3Cg transform='translate(30 300) rotate(-80) scale(1.9)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.18'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(60 300) rotate(-60) scale(1.6)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(20 300) rotate(-100) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.4'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(110 300) rotate(-110) scale(1.7)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.14'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(150 300) rotate(-75) scale(1.3)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23c7b8ff' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(200 300) rotate(-95) scale(1.8)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.3'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(240 300) rotate(-120) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.35'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3C/svg%3E") no-repeat center bottom / 100% auto; }
+[data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] * { color: #fff !important; }
+.logo { background: #fff; color: #4b57d6; box-shadow: 0 6px 16px rgba(20,20,90,.25); }
+.brand-name { color: #fff; } .brand-sub { color: rgba(255,255,255,.78); }
+[data-testid="stSidebar"] label[data-baseweb="radio"] { position: relative; padding: 12px 18px; margin: 4px -1rem 4px 0; width: auto;
+  border-radius: 28px 0 0 28px; background: transparent; box-shadow: none; }
+[data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child:not(:has([data-testid="stMarkdownContainer"])) { display: none; }
+[data-testid="stSidebar"] label[data-baseweb="radio"] p { color: rgba(255,255,255,.92); font-weight: 600; font-size: .95rem; margin: 0; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) { background: #ffffff; box-shadow: none; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) p { color: #3f4fd8; font-weight: 800; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before,
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::after { content: ''; position: absolute; right: 0; width: 18px; height: 18px; pointer-events: none; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before { top: -18px; background: radial-gradient(circle at 0 0, transparent 18px, #ffffff 18.5px); }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::after { bottom: -18px; background: radial-gradient(circle at 0 100%, transparent 18px, #ffffff 18.5px); }
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p { color: rgba(255,255,255,.75); }
+.side-me { color: rgba(255,255,255,.82); border-top: 1px solid rgba(255,255,255,.28); } .side-me b { color: #fff; }
+</style>
+"""
+if SIDEBAR_COLOR:
+    CSS += SIDEBAR_CSS
 if SHOW_FRAME:
     CSS += FRAME_CSS
 st.markdown(CSS, unsafe_allow_html=True)
