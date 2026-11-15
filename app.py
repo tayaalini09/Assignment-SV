@@ -15,8 +15,12 @@ import data_prep as dp
 
 st.set_page_config(page_title="Malaysia Income, Schools & Marriages", layout="wide")
 
-STUDENT_NAME = "Tayaalini Devarajan"          # <- change to your name
-MATRIC_NO = "S23A0164"    # <- change to your matric number
+try:  # your name and matric number live in student_info.py
+    from student_info import STUDENT_NAME, MATRIC_NO
+except Exception:
+    STUDENT_NAME, MATRIC_NO = "Your name", "Your matric number"
+
+SHOW_BORDER = True    # set to False to remove the patterned border
 
 GEOJSON_URL = ("https://raw.githubusercontent.com/codeforamerica/click_that_hood/"
                "master/public/data/malaysia.geojson")
@@ -66,7 +70,13 @@ CSS = """
   --shadow: 0 1px 2px rgba(23,50,77,.06), 0 10px 28px rgba(23,50,77,.07);
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16' viewBox='0 0 24 16'%3E%3Cpolygon points='0,16 12,1 24,16' fill='%230e7c86'/%3E%3Cpolygon points='6,16 12,7 18,16' fill='%23f4b400'/%3E%3C/svg%3E");
 }
-[data-testid="stAppViewContainer"] { background: var(--paper); }
+[data-testid="stAppViewContainer"] {
+  background-color: #eef6f8;
+  background-image:
+    radial-gradient(900px 600px at 72% 8%, rgba(255,255,255,.75), transparent 62%),
+    linear-gradient(135deg, #d3ece9 0%, #eef6f8 46%, #faf1d6 100%);
+  background-repeat: no-repeat;
+}
 [data-testid="stHeader"] { background: transparent; }
 .block-container { padding-top: 1.6rem; max-width: 1200px; }
 h1, h2, h3, h4 { font-family: 'Sora', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
@@ -115,6 +125,23 @@ h3 { font-size: 1.2rem; margin-top: 1.6rem; padding-bottom: 6px; border-bottom: 
 }
 </style>
 """
+
+FRAME_SVG = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='54' height='54' viewBox='0 0 54 54'%3E"
+             "%3Crect x='0' y='0' width='18' height='18' fill='%230e7c86'/%3E%3Crect x='36' y='0' width='18' height='18' fill='%230e7c86'/%3E"
+             "%3Crect x='0' y='36' width='18' height='18' fill='%230e7c86'/%3E%3Crect x='36' y='36' width='18' height='18' fill='%230e7c86'/%3E"
+             "%3Cpolygon points='9,3 15,9 9,15 3,9' fill='%23f4b400'/%3E%3Cpolygon points='45,3 51,9 45,15 39,9' fill='%23f4b400'/%3E"
+             "%3Cpolygon points='9,39 15,45 9,51 3,45' fill='%23f4b400'/%3E%3Cpolygon points='45,39 51,45 45,51 39,45' fill='%23f4b400'/%3E"
+             "%3Crect x='18' y='0' width='18' height='3' fill='%230e7c86'/%3E%3Cpolygon points='18,3 36,3 27,18' fill='%230e7c86'/%3E%3Cpolygon points='23,3 31,3 27,10' fill='%23f4b400'/%3E"
+             "%3Crect x='18' y='51' width='18' height='3' fill='%230e7c86'/%3E%3Cpolygon points='18,51 36,51 27,36' fill='%230e7c86'/%3E%3Cpolygon points='23,51 31,51 27,44' fill='%23f4b400'/%3E"
+             "%3Crect x='0' y='18' width='3' height='18' fill='%230e7c86'/%3E%3Cpolygon points='3,18 3,36 18,27' fill='%230e7c86'/%3E%3Cpolygon points='3,23 3,31 10,27' fill='%23f4b400'/%3E"
+             "%3Crect x='51' y='18' width='3' height='18' fill='%230e7c86'/%3E%3Cpolygon points='51,18 51,36 36,27' fill='%230e7c86'/%3E%3Cpolygon points='51,23 51,31 44,27' fill='%23f4b400'/%3E"
+             "%3C/svg%3E")
+FRAME_CSS = ("<style>.stApp::after { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; "
+             "pointer-events: none; z-index: 1000000; border: 18px solid transparent; "
+             f"border-image-source: url(\"{FRAME_SVG}\"); border-image-slice: 18; border-image-width: 18px; "
+             "border-image-repeat: round; } .pattern { display: none; } .block-container { padding-top: 2.6rem; }</style>")
+if SHOW_BORDER:
+    CSS += FRAME_CSS
 st.markdown(CSS, unsafe_allow_html=True)
 
 
