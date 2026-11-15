@@ -157,6 +157,22 @@ FRAME_CSS = """
   -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; z-index: 1000000; }
 </style>
 """
+KPI_CSS = """
+<style>
+.kpi { position: relative; overflow: hidden; border: none; padding: 20px 22px 18px; background: var(--g);
+       box-shadow: 0 14px 28px rgba(70,70,190,.26); min-height: 138px; }
+.kpi::after { content: ''; position: absolute; right: 0; bottom: 0; width: 62%; height: 58%; opacity: .2; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Cpath d='M0 60 C20 20 40 80 60 40 S100 20 120 50 L120 80 L0 80 Z' fill='white'/%3E%3C/svg%3E") no-repeat right bottom / 100% 100%; }
+.kpi:nth-child(4n+1) { --g: linear-gradient(135deg, #f0508a 0%, #c13f9f 100%); }
+.kpi:nth-child(4n+2) { --g: linear-gradient(135deg, #9a62dc 0%, #5b4bc9 100%); }
+.kpi:nth-child(4n+3) { --g: linear-gradient(135deg, #4fc6f2 0%, #5b8fe6 100%); }
+.kpi:nth-child(4n+4) { --g: linear-gradient(135deg, #ffb23f 0%, #f7703f 100%); }
+.kpi .kpi-label { color: rgba(255,255,255,.92); }
+.kpi .kpi-value { color: #fff; font-size: 2rem; text-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.kpi .pill { background: rgba(255,255,255,.26); color: #fff; }
+</style>
+"""
+CSS += KPI_CSS
 if SHOW_FRAME:
     CSS += FRAME_CSS
 st.markdown(CSS, unsafe_allow_html=True)
@@ -170,10 +186,12 @@ def page_head(title, text):
 def summary_box(items, title="Summary box"):
     cards = ""
     for label, value, note in items:
-        cls = "up" if str(note).startswith("+") else ("down" if str(note).startswith("-") else "flat")
+        note = str(note)
+        cls = "up" if note.startswith("+") else ("down" if note.startswith("-") else "flat")
+        arrow = "\u25B2 " if cls == "up" else ("\u25BC " if cls == "down" else "")
         cards += (f'<div class="kpi"><div class="kpi-label">{html.escape(str(label))}</div>'
                   f'<div class="kpi-value">{html.escape(str(value))}</div>'
-                  f'<span class="pill {cls}">{html.escape(str(note))}</span></div>')
+                  f'<span class="pill {cls}">{arrow}{html.escape(note)}</span></div>')
     if title:
         st.markdown(f'<div class="kpi-title">{html.escape(title)}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="kpis">{cards}</div>', unsafe_allow_html=True)
