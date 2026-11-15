@@ -1,5 +1,6 @@
 """JIE42403 Scientific Visualisation - Streamlit dashboard
 Household income, schools and marriages in Malaysia (2019-2023). Source: data.gov.my."""
+import html
 import json
 import urllib.request
 
@@ -13,6 +14,9 @@ from plotly.subplots import make_subplots
 import data_prep as dp
 
 st.set_page_config(page_title="Malaysia Income, Schools & Marriages", layout="wide")
+
+STUDENT_NAME = "Your name"          # <- change to your name
+MATRIC_NO = "Your matric number"    # <- change to your matric number
 
 GEOJSON_URL = ("https://raw.githubusercontent.com/codeforamerica/click_that_hood/"
                "master/public/data/malaysia.geojson")
@@ -54,40 +58,143 @@ def pct(new, old):
     return (new / old - 1) * 100
 
 
-def summary_box(items):
-    with st.container(border=True):
-        st.markdown("**Summary box**")
-        cols = st.columns(len(items))
-        for c, (label, value, delta) in zip(cols, items):
-            c.metric(label, value, delta)
+CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Sora:wght@500;600;700&display=swap');
+:root {
+  --ink:#17324d; --teal:#0e7c86; --saffron:#f4b400; --paper:#f6f8fb; --rule:#dde5ec; --soft:#5d7284;
+  --shadow: 0 1px 2px rgba(23,50,77,.06), 0 10px 28px rgba(23,50,77,.07);
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='16' viewBox='0 0 24 16'%3E%3Cpolygon points='0,16 12,1 24,16' fill='%230e7c86'/%3E%3Cpolygon points='6,16 12,7 18,16' fill='%23f4b400'/%3E%3C/svg%3E");
+}
+[data-testid="stAppViewContainer"] { background: var(--paper); }
+[data-testid="stHeader"] { background: transparent; }
+.block-container { padding-top: 1.6rem; max-width: 1200px; }
+h1, h2, h3, h4 { font-family: 'Sora', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
+h3 { font-size: 1.2rem; margin-top: 1.6rem; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+[data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li { font-family: 'DM Sans', sans-serif; }
+
+[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid var(--rule); }
+.side-title { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; line-height: 1.3; color: var(--ink); margin: 6px 0 10px; }
+.side-me { font-family: 'DM Sans', sans-serif; font-size: .85rem; line-height: 1.55; color: var(--soft);
+           border-top: 1px solid var(--rule); padding-top: 12px; margin-top: 18px; }
+
+.pattern { height: 16px; background-image: var(--pattern); background-repeat: repeat-x; background-size: 24px 16px;
+           border-bottom: 3px solid var(--teal); margin-bottom: 22px; }
+.page-head { margin-bottom: 22px; }
+.page-title { font-family: 'Sora', sans-serif; font-size: 2.1rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.page-obj { font-family: 'DM Sans', sans-serif; color: var(--soft); font-size: 1.05rem; max-width: 72ch; margin: .5rem 0 0; }
+
+.strip-title { font-family: 'Sora', sans-serif; font-weight: 600; color: var(--ink); margin: 4px 0 8px; }
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); background: #fff; border: 1px solid var(--rule);
+         border-top: 4px solid var(--teal); border-radius: 12px; margin-bottom: 24px; box-shadow: var(--shadow); }
+.cell { padding: 18px 22px; border-right: 1px solid var(--rule); }
+.cell:last-child { border-right: none; }
+.cell-label { font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--soft); font-weight: 500; }
+.cell-value { font-family: 'Sora', sans-serif; font-size: 1.7rem; font-weight: 600; color: var(--ink); margin: 3px 0; }
+.cell-note { font-family: 'DM Sans', sans-serif; font-size: .86rem; font-weight: 700; }
+.up { color: #1a7f5a; } .down { color: #c0392b; } .flat { color: var(--soft); }
+
+.finds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 8px 0 22px; }
+.find { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px; box-shadow: var(--shadow); }
+.find-num { font-family: 'Sora', sans-serif; font-size: 2.4rem; font-weight: 700; line-height: 1.1; }
+.find-text { font-family: 'DM Sans', sans-serif; color: #33495a; font-size: .98rem; margin-top: 8px; line-height: 1.5; }
+.find-tag { font-family: 'DM Sans', sans-serif; color: var(--soft); font-size: .86rem; font-weight: 500; margin-top: 10px; }
+
+.objs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 6px 0 20px; }
+.obj { background: #fff; border: 1px solid var(--rule); border-left: 5px solid var(--saffron); border-radius: 12px; padding: 18px 20px; }
+.obj h4 { margin: 0 0 6px; font-size: 1.05rem; }
+.obj p { margin: 0 0 8px; font-size: .95rem; color: #33495a; font-family: 'DM Sans', sans-serif; }
+.obj .src { font-size: .86rem; color: var(--soft); font-weight: 500; }
+
+[data-testid="stPlotlyChart"] { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 10px 12px;
+                                box-shadow: var(--shadow); }
+[data-testid="stExpander"] { background: #fff; border: 1px solid var(--rule); border-radius: 12px; }
+@media (max-width: 900px) {
+  .strip { grid-template-columns: repeat(2, 1fr); } .cell { border-bottom: 1px solid var(--rule); }
+  .objs, .finds { grid-template-columns: 1fr; }
+}
+</style>
+"""
+st.markdown(CSS, unsafe_allow_html=True)
+
+
+def page_head(title, text):
+    st.markdown(f'<div class="pattern"></div><div class="page-head"><div class="page-title">{html.escape(title)}</div>'
+                f'<p class="page-obj">{html.escape(text)}</p></div>', unsafe_allow_html=True)
+
+
+def summary_box(items, title="Summary box"):
+    cells = ""
+    for label, value, note in items:
+        cls = "up" if str(note).startswith("+") else ("down" if str(note).startswith("-") else "flat")
+        cells += (f'<div class="cell"><div class="cell-label">{html.escape(str(label))}</div>'
+                  f'<div class="cell-value">{html.escape(str(value))}</div>'
+                  f'<div class="cell-note {cls}">{html.escape(str(note))}</div></div>')
+    if title:
+        st.markdown(f'<div class="strip-title">{html.escape(title)}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="strip">{cells}</div>', unsafe_allow_html=True)
+
+
+def show(fig):
+    fig.update_layout(font=dict(family="DM Sans, Arial, sans-serif", color="#12263a"),
+                      title_font=dict(family="Sora, Arial, sans-serif", size=16))
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # ------------------------------------------------------------------ sidebar
-st.sidebar.title("Navigation")
+st.sidebar.markdown('<div class="pattern" style="margin-bottom:14px"></div>'
+                    '<div class="side-title">Malaysia income, schools and marriages</div>', unsafe_allow_html=True)
 page = st.sidebar.radio("Go to", ["Home", "Objective 1: Income", "Objective 2: Schools",
                                   "Objective 3: Marriages", "Merged data"])
-st.sidebar.caption("Source: data.gov.my. Three datasets merged on state + year (2019-2023).")
+st.sidebar.markdown(f'<div class="side-me">{html.escape(STUDENT_NAME)}<br>{html.escape(MATRIC_NO)}<br>'
+                    'JIE42403 Scientific Visualisation<br>Data: data.gov.my, 2019 to 2023</div>',
+                    unsafe_allow_html=True)
 
 # ================================================================== HOME
 if page == "Home":
-    st.title("Household Income, Schools and Marriages in Malaysia (2019-2023)")
-    st.write("JIE42403 Scientific Visualisation. Use the sidebar to open each objective.")
+    page_head("Household income, schools and marriages in Malaysia",
+              "Three open datasets for 16 states and federal territories, merged by state and year, 2019 to 2023.")
+    summary_box([("States and territories", "16", "all of Malaysia"),
+                 ("Years covered", "2019-2023", "income: 2019, 2020, 2022"),
+                 ("Merged table", "80 rows", "14 columns"),
+                 ("Datasets", "3", "income, schools, marriages")], title="")
+    _inc = merged.dropna(subset=["income_mean"]).groupby("year")["income_mean"].mean()
+    _sch = merged.groupby("year")["schools_total"].sum()
+    _mar = merged.groupby("year")["marriage_abs_avg"].sum()
+    st.markdown(f"""
+<div class="finds">
+  <div class="find"><div class="find-num" style="color:#c0392b">{pct(_inc[2020], _inc[2019]):+.1f}%</div>
+  <div class="find-text">Average household income fell in 2020 and was back above its 2019 level by 2022 ({pct(_inc[2022], _inc[2019]):+.1f}%).</div>
+  <div class="find-tag">Objective 1: income</div></div>
+  <div class="find"><div class="find-num" style="color:#0e7c86">{pct(_sch[2023], _sch[2019]):+.2f}%</div>
+  <div class="find-text">The number of schools hardly changed between 2019 and 2023 ({int(_sch[2023] - _sch[2019]):+d} schools).</div>
+  <div class="find-tag">Objective 2: schools</div></div>
+  <div class="find"><div class="find-num" style="color:#c0392b">{pct(_mar[2023], _mar[2019]):+.1f}%</div>
+  <div class="find-text">Marriages in 2023 were below 2019, after a dip in 2020 and a rebound in 2021.</div>
+  <div class="find-tag">Objective 3: marriages</div></div>
+</div>
+""", unsafe_allow_html=True)
     st.markdown("""
-- **Objective 1 - Household income trends:** show how household income changed across states between 2019,
-  2020 and 2022, and where it is highest and lowest. *(Data: income)*
-- **Objective 2 - School distribution:** examine the number and distribution of schools across states,
-  districts and school types from 2019 to 2023. *(Data: schools)*
-- **Objective 3 - Marriage trends:** explore how marriages changed by state and sex from 2019 to 2023,
-  and how they relate to household income. *(Data: marriages + income)*
-""")
-    st.info("Household income is only published for 2019, 2020 and 2022, so income charts use those years. "
-            "Schools and marriages have all five years.")
+<div class="objs">
+  <div class="obj"><h4>Objective 1: Household income trends</h4>
+  <p>Show how household income changed across states between 2019, 2020 and 2022, and where it is highest and lowest.</p>
+  <div class="src">Data: income</div></div>
+  <div class="obj"><h4>Objective 2: School distribution</h4>
+  <p>Examine the number and distribution of schools across states, districts and school types from 2019 to 2023.</p>
+  <div class="src">Data: schools</div></div>
+  <div class="obj"><h4>Objective 3: Marriage trends</h4>
+  <p>Explore how marriages changed by state and sex from 2019 to 2023, and how they relate to household income.</p>
+  <div class="src">Data: marriages and income</div></div>
+</div>
+""", unsafe_allow_html=True)
+    st.info("Open an objective from the menu on the left. Household income is only published for 2019, 2020 and 2022, "
+            "so income charts use those years. Schools and marriages have all five years.")
 
 # ================================================================== OBJECTIVE 1
 elif page == "Objective 1: Income":
-    st.header("Objective 1: Household income trends")
-    st.write("To show how household income changed across Malaysian states between 2019, 2020 and 2022, "
-             "and where it is highest and lowest.")
+    page_head("Objective 1: Household income trends",
+              "To show how household income changed across Malaysian states between 2019, 2020 and 2022, "
+              "and where it is highest and lowest.")
     inc = merged.dropna(subset=["income_mean"]).copy()
     avg = inc.groupby("year")[["income_mean", "income_median"]].mean()
     w = inc.pivot(index="state", columns="year", values="income_mean")
@@ -118,7 +225,7 @@ elif page == "Objective 1: Income":
     fig.update_xaxes(tickvals=[2019, 2020, 2022])
     fig.update_layout(template="plotly_white", title="Mean monthly household income by state",
                       legend_title_text="States & averages", hovermode="x unified", height=550)
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 2: map
     st.subheader("Visualization 2: Geospatial map")
@@ -139,10 +246,10 @@ elif page == "Objective 1: Income":
             ticktext=[f"{v // 1000}k" for v in range(5000, 14000, 1000)], thickness=15, len=0.75),
             title=f"Mean household income by state, {yr}", height=550, margin=dict(r=0, t=50, l=0, b=0))
         gj_names = {f["properties"]["canon"] for f in gj["features"]}
-        missing = sorted(set(dm["canon"]) - gj_names)
+        missing = sorted(dm.loc[~dm["canon"].isin(gj_names), "state"].unique())
         if missing:
             st.caption("Not shown on the map (no boundary in the GeoJSON): " + ", ".join(missing))
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 3: scatter 2019 vs 2022
     st.subheader("Visualization 3: Scatter plot, income 2019 vs 2022")
@@ -169,7 +276,7 @@ elif page == "Objective 1: Income":
     fig.update_layout(template="plotly_white", title="Mean household income: 2019 vs 2022", height=650,
                       coloraxis_colorbar=dict(title="% change", thickness=15, len=0.7),
                       legend=dict(orientation="h", y=-0.15))
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     with st.expander("Interpretation / Discussion", expanded=True):
         chg = pct(i22, i19).sort_values()
@@ -188,9 +295,9 @@ elif page == "Objective 1: Income":
 
 # ================================================================== OBJECTIVE 2
 elif page == "Objective 2: Schools":
-    st.header("Objective 2: School distribution")
-    st.write("To examine the number and distribution of schools across states, districts and school types "
-             "from 2019 to 2023.")
+    page_head("Objective 2: School distribution",
+              "To examine the number and distribution of schools across states, districts and school types "
+              "from 2019 to 2023.")
     tot = merged.groupby("year")[["schools_primary", "schools_secondary", "schools_tertiary",
                                   "schools_total"]].sum()
     top23 = merged[merged["year"] == 2023].set_index("state")["schools_total"]
@@ -221,7 +328,7 @@ elif page == "Objective 2: Schools":
         fig.update_yaxes(title_text="Number of schools", row=1, col=i)
     fig.update_layout(template="plotly_white", height=450,
                       title="Change in number of schools, 2019-2023 (y-axes zoomed to show small changes)")
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 2: treemap
     st.subheader("Visualization 2: Treemap (state > district)")
@@ -242,7 +349,7 @@ elif page == "Objective 2: Schools":
         pass
     fig.update_layout(title=f"{ty} schools by state and district, {yr}", height=700,
                       coloraxis_colorbar=dict(title="Schools per district"))
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 3: heatmap of change vs 2019
     st.subheader("Visualization 3: Heatmap of change in schools vs 2019")
@@ -252,8 +359,9 @@ elif page == "Objective 2: Schools":
     chg.columns = [str(c) for c in chg.columns]
     fig = px.imshow(chg, text_auto="+d", aspect="auto", color_continuous_scale="RdBu", zmin=-4, zmax=4,
                     labels={"color": "Change in schools", "x": "Year", "y": "State"})
+    fig.update_xaxes(type="category")
     fig.update_layout(title="Change in total schools compared with 2019, by state", height=600)
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     with st.expander("Interpretation / Discussion", expanded=True):
         chg23 = chg["2023"]
@@ -274,9 +382,9 @@ elif page == "Objective 2: Schools":
 
 # ================================================================== OBJECTIVE 3
 elif page == "Objective 3: Marriages":
-    st.header("Objective 3: Marriage trends")
-    st.write("To explore how marriages changed across states and by sex from 2019 to 2023, and how they relate "
-             "to household income.")
+    page_head("Objective 3: Marriage trends",
+              "To explore how marriages changed across states and by sex from 2019 to 2023, and how they relate "
+              "to household income.")
     p = merged.pivot(index="state", columns="year", values="marriage_abs_avg")
     nat = merged.groupby("year").agg(f=("marriage_rate_female", "mean"), m=("marriage_rate_male", "mean"),
                                      cnt=("marriage_abs_avg", "sum"))
@@ -308,7 +416,7 @@ elif page == "Objective 3: Marriages":
     fig.update_xaxes(dtick=1)
     fig.update_layout(template="plotly_white", title="Average marriage rate by sex, 2019-2023 (y-axis zoomed)",
                       height=480)
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 2: diverging bar
     st.subheader("Visualization 2: Change in marriages by state")
@@ -323,7 +431,7 @@ elif page == "Objective 3: Marriages":
     fig.update_xaxes(range=[-27, 20], title="% change")
     fig.update_layout(template="plotly_white", title=f"Change in marriages by state, 2019 to {yb} (%)",
                       height=650, coloraxis_colorbar=dict(title="% change", thickness=15, len=0.6))
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     # ---- Visualization 3: scatter income vs marriage change
     st.subheader("Visualization 3: Income change vs marriage change")
@@ -346,7 +454,7 @@ elif page == "Objective 3: Marriages":
     fig.update_layout(template="plotly_white", height=650, margin=dict(r=100),
                       title="Income change vs marriage change by state, 2019 to 2022",
                       coloraxis_colorbar=dict(title="Marriage change (%)", thickness=15, len=0.7))
-    st.plotly_chart(fig, use_container_width=True)
+    show(fig)
 
     with st.expander("Interpretation / Discussion", expanded=True):
         strength = "no clear" if abs(r) < 0.2 else ("weak" if abs(r) < 0.4 else "moderate or strong")
@@ -363,9 +471,9 @@ elif page == "Objective 3: Marriages":
 
 # ================================================================== MERGED DATA
 else:
-    st.header("Merged dataset (state x year)")
-    st.write("Three data.gov.my files merged on **state + year**: schools (state totals from the "
-             "'All Districts' rows), marriages (male and female) and household income.")
+    page_head("Merged dataset (state by year)",
+              "Three data.gov.my files merged on state and year: schools (state totals from the 'All Districts' rows), "
+              "marriages (male and female) and household income.")
     out = merged.drop(columns=["canon"])
     st.dataframe(out, use_container_width=True)
     st.caption("Income is empty for 2021 and 2023 because the source file has no data for those years.")
