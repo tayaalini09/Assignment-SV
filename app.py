@@ -15,8 +15,8 @@ import data_prep as dp
 
 st.set_page_config(page_title="Malaysia Income, Schools & Marriages", layout="wide")
 
-STUDENT_NAME = "Your name"          # <- change to your name
-MATRIC_NO = "Your matric number"    # <- change to your matric number
+STUDENT_NAME = "Tayaalini Devarajan"          # <- change to your name
+MATRIC_NO = "S23A0164"    # <- change to your matric number
 
 GEOJSON_URL = ("https://raw.githubusercontent.com/codeforamerica/click_that_hood/"
                "master/public/data/malaysia.geojson")
