@@ -189,9 +189,9 @@ SIDEBAR_CSS = """
 [data-testid="stSidebar"] label[data-baseweb="radio"] { position: relative; padding: 12px 18px; margin: 4px -1rem 4px 0; width: auto;
   border-radius: 28px 0 0 28px; background: transparent; box-shadow: none; }
 [data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child:not(:has([data-testid="stMarkdownContainer"])) { display: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"] p { color: rgba(255,255,255,.92); font-weight: 600; font-size: .95rem; margin: 0; }
+[data-testid="stSidebar"] label[data-baseweb="radio"] p { color: #fff; font-weight: 700 !important; font-size: 1.02rem; letter-spacing: .01em; margin: 0; }
 [data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) { background: #ffffff; box-shadow: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) p { color: #3f4fd8; font-weight: 800; }
+[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) p { color: #3f4fd8; font-weight: 800 !important; }
 [data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before,
 [data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::after { content: ''; position: absolute; right: 0; width: 18px; height: 18px; pointer-events: none; }
 [data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before { top: -18px; background: radial-gradient(circle at 0 0, transparent 18px, #ffffff 18.5px); }
