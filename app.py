@@ -195,7 +195,10 @@ SIDEBAR_CSS = """
   background: transparent; border: none; box-shadow: none; color: #fff; }
 [data-testid="stSidebar"] .stButton button:hover { background: rgba(255,255,255,.16); color: #fff; }
 [data-testid="stSidebar"] .stButton button p, [data-testid="stSidebar"] .stButton button div {
-  color: #fff; font-weight: 700 !important; font-size: 1.02rem; margin: 0; text-align: left; }
+  color: #fff; font-weight: 700 !important; font-size: .95rem; margin: 0; text-align: left !important; white-space: nowrap !important; }
+[data-testid="stSidebar"] .stButton button { display: flex !important; justify-content: flex-start !important; padding: 12px 16px !important; }
+[data-testid="stSidebar"] .stButton button > div { width: 100%; display: flex; justify-content: flex-start !important; text-align: left; }
+[data-testid="stSidebar"] .stButton button [data-testid="stMarkdownContainer"] { width: 100%; text-align: left; }
 [data-testid="stSidebar"] .stButton button[kind="primary"], [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
   background: #ffffff; box-shadow: 0 8px 20px rgba(20,20,90,.22); }
 [data-testid="stSidebar"] .stButton button[kind="primary"] p, [data-testid="stSidebar"] .stButton button[kind="primary"] div,
