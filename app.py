@@ -179,25 +179,29 @@ KPI_CSS = """
 CSS += KPI_CSS
 SIDEBAR_CSS = """
 <style>
-[data-testid="stSidebar"] { background: linear-gradient(180deg, #4b57d6 0%, #5b4fc9 55%, #7c5cdb 100%); border-right: none;
-                            backdrop-filter: none; -webkit-backdrop-filter: none; overflow: hidden; }
-[data-testid="stSidebar"]::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40%; max-height: 330px;
-  pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 300'%3E%3Cg transform='translate(30 300) rotate(-80) scale(1.9)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.18'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(60 300) rotate(-60) scale(1.6)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(20 300) rotate(-100) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.4'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(110 300) rotate(-110) scale(1.7)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.14'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(150 300) rotate(-75) scale(1.3)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23c7b8ff' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(200 300) rotate(-95) scale(1.8)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.3'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(240 300) rotate(-120) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.35'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3C/svg%3E") no-repeat center bottom / 100% auto; }
+[data-testid="stSidebar"] {
+  background-color: #5b4fc9;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 300'%3E%3Cg transform='translate(30 300) rotate(-80) scale(1.9)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.18'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(60 300) rotate(-60) scale(1.6)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(20 300) rotate(-100) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.4'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(110 300) rotate(-110) scale(1.7)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ffffff' fill-opacity='0.14'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(150 300) rotate(-75) scale(1.3)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23c7b8ff' fill-opacity='0.45'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(200 300) rotate(-95) scale(1.8)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%23ff9ec7' fill-opacity='0.3'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3Cg transform='translate(240 300) rotate(-120) scale(1.5)'%3E%3Cpath d='M0 0 C18 -26 58 -30 90 0 C58 30 18 26 0 0 Z' fill='%237fd8ff' fill-opacity='0.35'/%3E%3Cpath d='M0 0 L88 0' stroke='white' stroke-opacity='0.35' stroke-width='0.6'/%3E%3C/g%3E%3C/svg%3E"), linear-gradient(180deg, #4b57d6 0%, #5b4fc9 55%, #7c5cdb 100%);
+  background-repeat: no-repeat, no-repeat; background-position: center bottom, center; background-size: 100% auto, 100% 100%;
+  border-right: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+[data-testid="stSidebarContent"] { background: transparent; }
 [data-testid="stSidebar"] [data-testid="stSidebarCollapseButton"] * { color: #fff !important; }
 .logo { background: #fff; color: #4b57d6; box-shadow: 0 6px 16px rgba(20,20,90,.25); }
 .brand-name { color: #fff; } .brand-sub { color: rgba(255,255,255,.78); }
-[data-testid="stSidebar"] label[data-baseweb="radio"] { position: relative; padding: 12px 18px; margin: 4px -1rem 4px 0; width: auto;
-  border-radius: 28px 0 0 28px; background: transparent; box-shadow: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"] > div:first-child:not(:has([data-testid="stMarkdownContainer"])) { display: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"] p { color: #fff; font-weight: 700 !important; font-size: 1.02rem; letter-spacing: .01em; margin: 0; }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) { background: #ffffff; box-shadow: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked) p { color: #3f4fd8; font-weight: 800 !important; }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before,
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::after { content: ''; position: absolute; right: 0; width: 18px; height: 18px; pointer-events: none; }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::before { top: -18px; background: radial-gradient(circle at 0 0, transparent 18px, #ffffff 18.5px); }
-[data-testid="stSidebar"] label[data-baseweb="radio"]:has(input:checked)::after { bottom: -18px; background: radial-gradient(circle at 0 100%, transparent 18px, #ffffff 18.5px); }
-[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p { color: rgba(255,255,255,.75); }
-.side-me { color: rgba(255,255,255,.82); border-top: 1px solid rgba(255,255,255,.28); } .side-me b { color: #fff; }
+/* navigation buttons */
+[data-testid="stSidebar"] .stButton { margin-bottom: 2px; }
+[data-testid="stSidebar"] .stButton button {
+  width: 100%; justify-content: flex-start; text-align: left; padding: 12px 20px; border-radius: 26px;
+  background: transparent; border: none; box-shadow: none; color: #fff; }
+[data-testid="stSidebar"] .stButton button:hover { background: rgba(255,255,255,.16); color: #fff; }
+[data-testid="stSidebar"] .stButton button p, [data-testid="stSidebar"] .stButton button div {
+  color: #fff; font-weight: 700 !important; font-size: 1.02rem; margin: 0; text-align: left; }
+[data-testid="stSidebar"] .stButton button[kind="primary"], [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] {
+  background: #ffffff; box-shadow: 0 8px 20px rgba(20,20,90,.22); }
+[data-testid="stSidebar"] .stButton button[kind="primary"] p, [data-testid="stSidebar"] .stButton button[kind="primary"] div,
+[data-testid="stSidebar"] [data-testid="stBaseButton-primary"] p, [data-testid="stSidebar"] [data-testid="stBaseButton-primary"] div {
+  color: #3f4fd8; font-weight: 800 !important; }
+.side-me { color: rgba(255,255,255,.85); border-top: 1px solid rgba(255,255,255,.28); } .side-me b { color: #fff; }
 </style>
 """
 if SIDEBAR_COLOR:
@@ -236,8 +240,15 @@ def show(fig):
 # ------------------------------------------------------------------ sidebar
 st.sidebar.markdown('<div class="brand"><div class="logo">MY</div><div><div class="brand-name">Malaysia Dashboard</div>'
                     '<div class="brand-sub">Income, schools and marriages</div></div></div>', unsafe_allow_html=True)
-page = st.sidebar.radio("Go to", ["Home", "Objective 1: Income", "Objective 2: Schools",
-                                  "Objective 3: Marriages", "Merged data"])
+PAGES = ["Home", "Objective 1: Income", "Objective 2: Schools", "Objective 3: Marriages", "Merged data"]
+if "page" not in st.session_state:
+    st.session_state["page"] = "Home"
+for _name in PAGES:
+    if st.sidebar.button(_name, key="nav_" + _name, use_container_width=True,
+                         type="primary" if st.session_state["page"] == _name else "secondary"):
+        st.session_state["page"] = _name
+        (getattr(st, "rerun", None) or st.experimental_rerun)()
+page = st.session_state["page"]
 st.sidebar.markdown(f'<div class="side-me"><b>{html.escape(STUDENT_NAME)}</b><br>{html.escape(MATRIC_NO)}<br>'
                     'JIE42403 Scientific Visualisation<br>Data: data.gov.my, 2019 to 2023</div>',
                     unsafe_allow_html=True)
