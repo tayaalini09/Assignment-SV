@@ -13,7 +13,8 @@ from plotly.subplots import make_subplots
 
 import data_prep as dp
 
-st.set_page_config(page_title="Malaysia Income, Schools & Marriages", layout="wide")
+st.set_page_config(page_title="Malaysia Income, Schools & Marriages", layout="wide",
+                   initial_sidebar_state="expanded")
 
 try:  # your name and matric number live in student_info.py
     from student_info import STUDENT_NAME, MATRIC_NO
@@ -82,6 +83,10 @@ CSS = """
   background-repeat: no-repeat;
 }
 [data-testid="stHeader"] { background: transparent; }
+[data-testid="stSidebarCollapsedControl"], [data-testid="stExpandSidebarButton"] {
+  position: fixed; top: 30px; left: 30px; z-index: 1000001; background: #ffffff; border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(64,84,180,.30); padding: 2px; }
+[data-testid="stSidebarCollapsedControl"] *, [data-testid="stExpandSidebarButton"] * { color: #4c5fe0 !important; }
 .block-container { padding-top: 2.8rem; padding-left: 2.6rem; padding-right: 2.6rem; padding-bottom: 3.5rem; max-width: 1200px; }
 [data-testid="stSidebarUserContent"] { padding-left: 1.3rem; padding-right: 1rem; padding-top: .6rem; }
 [data-testid="stSidebarHeader"] { padding-left: 1.3rem; padding-right: 1.2rem; }
